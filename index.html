@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="ta ra taaaa ra ra taaa ta ra taaaaara">
+<meta name="keywords" content="I, feel, pretty, also, pretty">
+<meta name="author" content="pam pam paaaaaam">
+<meta name="robots" content="In SPAAAAAAAAAACE! SPAAAAAAACE!">
+<meta charset="UTF-8">
+
+<title>Upgrading</title>
+
+<!--
+Side channel attacking, aren't we?
+-->
+
+<link rel="stylesheet" type="text/css" href="css/animate.css">
+<link rel="stylesheet" type="text/css" href="css/choice.css">
+<link rel="stylesheet" type="text/css" href="css/jquery.gridster.css">
+<link rel="stylesheet" type="text/css" href="css/fancyInput.css">
+
+<script src="js/jquery.js"></script>
+<script src="js/jqueryui.js"></script>
+<script src="js/lettering.js"></script>
+<script src="js/textillate.js"></script>
+<script src="js/gridster.js"></script>
+<script src="js/fancyInput.js"></script>
+
+<script>
+
+jQuery(document).ready(function($) {
+
+$.fn.shuffle = function(o){ 
+    for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
+};
+
+$.fn.fibonacciGen = function(n)
+{
+	var first,second,add;
+	var fib = [];
+	for(var i = 0; i < 20; i++)
+	{
+    	if(i === 0)
+    	{
+        	first = 1;
+        	second = 2;
+    	}
+    	add = first + second;
+    	fib.push(add);
+    	first = second;
+    	second = add;
+	}
+	return fib;
+}
+
+var etx = {
+    init: function (){
+        etx.callFontFlakes();
+    },
+    callFontFlakes: function(){
+            window.setInterval(function(){
+                        etx.fontFlake();
+            }, 10);
+    },
+    fontFlake: function(){
+    
+        var stageWidth = $(window).width();
+        var stageHeight = $(window).height();
+     	var fib = $(document).shuffle($(document).fibonacciGen());
+        var randomText = fib[0];
+        var randomEntry = Math.ceil(Math.random()*stageWidth);
+        var preRandomFontSize = Math.ceil(Math.random()*40);
+        var randomFontSize = preRandomFontSize + 10;
+        var flakeName = 'flake-'+randomEntry;
+        var grayScale = Math.ceil(Math.random()*256);
+        var hue = 'rgb('+grayScale+','+grayScale+','+grayScale+ ')';
+        
+        $('<div />', {
+                text: randomText,
+                id: flakeName,
+        }).appendTo('body').addClass('fontFlake').css('left', randomEntry).css('font-size', randomFontSize).css('color', hue).animate({
+                "top": "+=" + stageHeight,
+                opacity: 0
+        }, 5000, function() {
+                $('#'+flakeName).remove();                      
+        }); 
+	}
+};
+
+$('div :input').fancyInput();
+	
+	var corrects= [
+		{ id: 2, col: 1, row: 1},
+		{ id: 3, col: 2, row: 1},
+		{ id: 5, col: 3, row: 1},
+		{ id: 8, col: 4, row: 1},
+		{ id: 13, col: 1, row: 2},
+		{ id: 21, col: 2, row: 2},
+		{ id: 34, col: 3, row: 2},
+		{ id: 55, col: 4, row: 2},
+		{ id: 89, col: 1, row: 3},
+		{ id: 144, col: 2, row: 3},
+		{ id: 233, col: 3, row: 3},
+		{ id: 377, col: 4, row: 3}
+	];
+	
+  var gridster = $(".gridster ul").gridster({
+        widget_margins: [10, 10],
+        widget_base_dimensions: [140, 140],
+        serialize_params: function($w, wgd) {
+            return {
+                id: wgd.el[0].id,
+                col: wgd.col,
+                row: wgd.row,
+            };
+        }
+    }).data('gridster');
+		
+	$('.tlt').textillate({selector: '.texts', loop: false, minDisplayTime: 2000, initialDelay: 0, autoStart: true, inEffects: [], outEffects: [ 'hinge' ],
+		in: { effect: 'fadeInLeft', delayScale: 1.5, delay: 15, sync: false, shuffle: false },
+		  out: { effect: 'hinge', delayScale: 1.5, delay: 30, sync: false, shuffle: false}
+	});
+
+	$('#container2').hide();
+	$('#container3').hide();
+	$('#container1').addClass('animated fadeIn');
+	$('.navigation').addClass('animated fadeIn');
+	
+	var cont = 1; 
+	var foundFlag = false;
+	var third_found = false;
+
+	$(".spaace").hover(
+		function()
+		{
+		  	$(".spaace").html("are you space?");
+		  	$(this).animate({ fontSize: "2em" }, 250, function() {});
+	    },
+  		function()
+		{
+  	 		$(".spaace").html("space");
+  			$(this).animate({ fontSize: "1em"}, 250, function() {});
+ 		 }
+	);
+
+	$(document).mouseup(function(e)
+	{
+		if (cont == 2 && !found)
+		{
+			var changed = new Object();
+			var found = 0;
+			changed = gridster.serialize_changed();
+			
+			for (var key in changed)
+				for (var key2 in corrects)
+					if (corrects[key2].id == changed[key].id)
+						if (changed[key].col == corrects[key2].col && changed[key].row == corrects[key2].row)
+						{
+							found++;
+							if (found == 12 && !foundFlag)
+							{
+								$("img").effect("pulsate", { times:6 }, 300);
+								foundFlag = true;
+								$('#goDeep').show();
+								$('#goDeep').addClass('animated fadeIn');
+							}
+						}
+		}
+	});
+
+	$(document).keydown(function(e)
+	{
+		if (e.keyCode == 13) 
+		{
+			e.preventDefault();
+			var text = $("#into").val();
+			if (!third_found)
+			{
+				if ((text == "9") || (text.toLowerCase() == "nine"))
+				{
+					third_found = true;
+					$('.onceMore').html("Indeed. And which number was red?");
+					$('.fancyInput').show("fade", {}, 400);
+					$('.onceMore').show("fade", {}, 400);
+				}
+				else
+				{
+					$(".onceMore").effect("shake", { times:3 }, 150);
+					$(".fancyInput").effect("shake", { times:3 }, 150);
+				}
+			}
+			else
+			{
+				if (text == "55")
+				{
+					$('#into').addClass("animated fadeOutUp");
+					$('#final').show();
+					$('#final').addClass("animated fadeInDown");
+					$('.onceMore').html("Yes. Stay safe and enjoy the song.");
+					$('.onceMore').addClass("animated fadeInRight");
+					third_found = "bye bye";
+					$('.fancyInput').hide();
+					$(document).unbind('keydown');
+					etx.init();
+				}
+				else
+				{
+					$(".onceMore").effect("shake", { times:3 }, 150);
+					$(".fancyInput").effect("shake", { times:3 }, 150);
+				}
+			}
+		}
+
+		if (e.keyCode == 32) 
+		{
+			e.preventDefault();
+			switch(cont)
+			{
+				case 1:
+					$('#container1').hide();
+					$('#container2').show();
+					$('#goDeep').hide();
+					$('#container2').addClass('animated fadeIn');
+					$('#container1').addClass('animated lightSpeedOut');
+					$('#patterns').addClass('animated hinge');
+					cont = 2;
+					break;
+				case 2:
+					if (foundFlag)
+					{
+						$('#container2').hide();
+						$('#container3').show();
+						$('#final').hide();
+						$('#container2').addClass('animated lightSpeedOut');
+						$('#container3').addClass('animated fadeIn');
+						cont = 3;
+					  	break;
+					}
+				default:
+			}		
+		}	
+	});
+});
+
+</script>
+</head>
+<body>
+
+<div id="container1">
+<table>
+	<tr>
+		<td>
+		<div style="position: absolute; left:10%; top:30%; width: 1200px;">
+		<h1 id="rant" class="tlt">Moving to a different domain name, be right back</h1>
+		<br><br><br>
+		<span class="navigation"><em>Press <a href="http://www.youtube.com/watch?v=BVn1oQL9sWg" target="_blank"><span class="spaace">space</span></a> to navigate</em></span>
+		</div>
+		
+		</td>
+	</tr>
+</table>
+</div>
+
+<div id="container2">
+<div class="gridster" style="position: absolute; top:10%; left:10%;">
+    <ul>
+        <li id="89" data-row="1" data-col="1" data-sizex="1" data-sizey="1"><img src="img/89.jpg" width="140" height="140" alt="89"></li>
+        <li id="8" data-row="2" data-col="1" data-sizex="1" data-sizey="1"><img src="img/8.jpg" width="140" height="140" alt="8"></li>
+        <li id="55" data-row="3" data-col="1" data-sizex="1" data-sizey="1"><img src="img/55.jpg" width="140" height="140" alt="55"></li>
+ 
+        <li id="5" data-row="1" data-col="2" data-sizex="1" data-sizey="1"><img src="img/5.jpg" width="140" height="140" alt="5"></li>
+        <li id="377" data-row="2" data-col="2" data-sizex="1" data-sizey="1"><img src="img/377.png" width="140" height="140" alt="377"></li>
+		<li id="34" data-row="3" data-col="2" data-sizex="1" data-sizey="1"><img src="img/34.jpg" width="140" height="140" alt="34"></li>
+		
+		<li id="3" data-row="1" data-col="3" data-sizex="1" data-sizey="1"><img src="img/3.jpg" width="140" height="140" alt="3"></li>
+        <li id="233" data-row="2" data-col="3" data-sizex="1" data-sizey="1"><img src="img/233.png" width="140" height="140" alt="233"></li>
+		<li id="21" data-row="3" data-col="3" data-sizex="1" data-sizey="1"><img src="img/21.jpg" width="140" height="140" alt="21"></li>
+ 
+        <li id="2" data-row="1" data-col="4" data-sizex="1" data-sizey="1"><img src="img/2.jpg" width="140" height="140" alt="2"></li>
+        <li id="144" data-row="2" data-col="4" data-sizex="1" data-sizey="1"><img src="img/144.png" width="140" height="140" alt="144"></li>
+        <li id="13" data-row="3" data-col="4" data-sizex="1" data-sizey="1"><img src="img/13.png" width="140" height="140" alt="13"></li>
+		
+    </ul>
+</div>
+<div id="goDeep">
+		<div id="patterns">Are you sure this was a pattern?</div>
+	<br>
+	<span class="navigation"><em>Press <a href="http://www.youtube.com/watch?v=BVn1oQL9sWg" target="_blank"><span class="spaace">space</span></a> to go deep</em>
+	</span>
+
+</div>
+</div>
+
+<div id="container3">
+
+<div style=" position: absolute; top:45%; left:22%;">
+    <input type='text' id="into">
+</div>
+<span class="onceMore">Focus. How many numbers were blue?</span>
+
+<iframe id="final" style="position:absolute; top: 20%; left: 32%; border: 0px; width:420px; height:215px;"  src="https://www.youtube.com/embed/lhB2rcyYg6A" frameborder="0" allowfullscreen></iframe>
+
+
+</div>
+
+</body>
+</html>
